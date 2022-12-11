@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&family=Space+Mono:wght@400;700&display=swap');
+
+html {
+  background-color: #FFEFD6;
+}
+
+body {
+  margin: 0;
+}
+
+.page-container {
+  max-width: 800px;
+
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+.header {
+  position: absolute;
+  width: 100vw;
+  left: 0;
+  top: 0;
+  background-color: #F2DEBA;
+  height: 3em;
+  border-bottom: 1px solid gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header > div {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 1000px;
+}
+
+.footer {
+  background-color: #F2DEBA;
+  margin-top: 4em;
+  height: 2em;
+  border: 1px solid gray;
+  padding: 1em;
+  border-radius: 2em;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.1em;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  max-width: 500px;
+  margin: auto;
+}
+
+.select-container {
+  display: flex;
+  flex-direction: row;
+  padding: 2em;
+}
+
+.select-container > div {
+  margin: 1em;
+}
+
+.text-selection {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid red;
+  width: 90%;
+  margin: 10px auto;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cypher-container {
+  margin-top: 5em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cypher-word {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.25em;
+  color: #062b33
+}
+
+.cypher-letter {
+  width: fit-content;
+  margin: 0.5em 0.1em;
+}
+
+.cypher-letter > .top {
+  border-bottom: solid black 1px;
+  font-weight: 600;
+  float: left;
+}
+.cypher-letter > .bottom {
+  clear: left;
+  float: left;
+  font-size: 0.8em;
+  margin-top: 0.2em;
+  font-family: 'Space Mono', monospace;
+  font-weight: 500;
+  color: #48abb6;
+}
+
+.non-letter {
+  font-size: 1.5em;
+  width: 0.2em;
+  margin-top: 0.45em;
+  text-align: center;
+}
+
+.non-letter.space {
+  width: 1em;
+}
+
+input {
+  all: unset;
+  width: 0.66em;
+}
+
+input:focus, input:hover:not(disabled) {
+  background-color: #419aa3;
+}
+
+.highlight {
+  background-color: #48abb6a1;
+}
+
+label {
+  cursor: text;
+}
+
+.alphabet {
+  color: #062b33;
+}
+
+.fade {
+  color: #48abb6a1;
+}
+
+.revealed {
+  text-decoration: underline;
+}
+
+.hidden {
+  visibility: hidden;
+}
