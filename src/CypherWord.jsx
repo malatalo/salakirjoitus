@@ -1,6 +1,6 @@
 import { alphabet } from "./helpers";
 
-const CypherWord = ({ word, ids, mix, updateMix, selectNextEmptyInput }) => {
+const CypherWord = ({ word, ids, mix, updateMix, selectNextEmptyInput, won }) => {
 
   const handleKeyDown = (real) => (event) => {
     event.preventDefault();
@@ -36,7 +36,7 @@ const CypherWord = ({ word, ids, mix, updateMix, selectNextEmptyInput }) => {
           <div className="cypher-letter" key={letter + i}>
             <div className="top">
               <input
-                className= {`${current.highlight ? "highlight" :""}`}
+                className= {`${current.highlight && won === false ? "highlight" :""}`}
                 id={id}
                 key={letter}
                 type="text"
@@ -44,9 +44,9 @@ const CypherWord = ({ word, ids, mix, updateMix, selectNextEmptyInput }) => {
                 onFocus={handleFocus({real: letter, highlight: true})}
                 onBlur={handleFocus({real: letter, highlight: false})}
                 defaultValue={current.isRevealed ? current.real:current.guess}
-                disabled={current.isRevealed}
                 onKeyDown={handleKeyDown(letter)}
                 onKeyUp={handleKeyUp}
+                disabled={won}
               ></input>
             </div>
             <label htmlFor={id} className="bottom">

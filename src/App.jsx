@@ -6,6 +6,10 @@ import "./style.css";
 const App = () => {
   const [selectedQuote, setSelectedQuote] = useState();
 
+  const randomQuote = () => {
+    setSelectedQuote(quotes[Math.floor(Math.random() * quotes.length)])
+  }
+
   const getPage = () => {
     if (selectedQuote) {
       window.ratkaisu = selectedQuote.text;
@@ -13,12 +17,12 @@ const App = () => {
     } else {
       return <div className="container">
         <h1>Valitse teksti</h1>
-        <div className="select-container">
-          <div className="text-selection">Satunnainen</div>
+        <button className="text-selection-random" onClick={randomQuote}>Satunnainen</button>
+        <div className="text-selection-flex">
           {quotes.map((quote) => (
-            <div key={quote.id} className="text-selection" onClick={()=>setSelectedQuote(quote)}>
+            <button key={quote.id} className="text-selection" onClick={()=>setSelectedQuote(quote)}>
               {quote.id}
-            </div>
+            </button>
           ))}
         </div>
       </div>

@@ -5,6 +5,8 @@ import { alphabet, nonLetters } from "./helpers";
 const Cypher = ({ quote, goBack }) => {
   const [mix, setMix] = useState();
   const [showSource, setShowSource] = useState(false);
+  const [won, setWon] = useState(false);
+  const [number, setNumber] = useState(0);
 
   useEffect(() => {
     const shuffledAlphabet = [...alphabet].sort((a, b) => 0.5 - Math.random());
@@ -27,29 +29,23 @@ const Cypher = ({ quote, goBack }) => {
 
     document.onkeydown = handleKeyControls;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quote]);
+  }, []);
 
-
-  //TODO
-  const doUndo = () => {};
-
-  const doRedo = () => {};
+  useEffect(() => {
+    if(!mix) return;
+    const win = !mix.some((m) => m.real !== m.guess && !m.isRevealed);
+    if(win) {
+      setWon(true);
+      setNumber(mix.filter(m => m.isRevealed).length)
+    }
+  }, [mix, won, setWon]);
 
   const handleKeyControls = (evt) => {
     const event = window.event ? window.event : evt;
     const key = event.key.toUpperCase();
 
-    if (event.ctrlKey) {
-      if (event.shiftKey) {
-        if (key === "Z") doRedo();
-      }
-
-      if (key === "Z") doUndo();
-      if (key === "Y") doRedo();
-    }
-
-    if(key === "TAB") {
-      selectNextEmptyInput({id: event.target.id, forward: !event.shiftKey});
+    if (key === "TAB") {
+      selectNextEmptyInput({ id: event.target.id, forward: !event.shiftKey });
     }
 
     if (event.keyCode >= 37 && event.keyCode <= 40) {
@@ -88,19 +84,32 @@ const Cypher = ({ quote, goBack }) => {
   };
 
   const revealLetter = () => {
-    const notRevealed = mix.filter((letter) => !letter.isRevealed);
-    if (notRevealed.length === 0) return;
-    const toReveal = notRevealed[Math.floor(Math.random() * notRevealed.length)];
+    const notGuessed = mix.filter((letter) => !letter.guess && !letter.isRevealed);
+    const wrongGuesses = mix.filter(
+      (letter) => !letter.guess !== letter.real && !letter.isRevealed
+    );
+
+    let toReveal;
+
+    if (notGuessed.length !== 0) {
+      toReveal = notGuessed[Math.floor(Math.random() * notGuessed.length)];
+    } else if (wrongGuesses.length !== 0) {
+      toReveal = wrongGuesses[Math.floor(Math.random() * wrongGuesses.length)];
+    } else if (notGuessed.length === 0 && wrongGuesses.length === 0) {
+      return;
+    }
+
     const newMix = mix.map((m) => {
       if (m.real === toReveal.real) {
-        return { ...m, isRevealed: true };
+        return { ...m, isRevealed: true, guess: "" };
+      } else if (m.guess === toReveal.real) {
+        return { ...m, guess: "" };
       }
       return m;
     });
     setMix(newMix);
   };
 
-  //memoize?
   const getInputs = () => Array.from(document.querySelectorAll("input"));
   const getRows = (inputs) =>
     inputs
@@ -191,6 +200,7 @@ const Cypher = ({ quote, goBack }) => {
               key={"w" + i}
               handleArrowKeys={handleArrowKeys}
               selectNextEmptyInput={selectNextEmptyInput}
+              won={won}
             />
           );
         }
@@ -229,36 +239,40 @@ const Cypher = ({ quote, goBack }) => {
       <div className="header">
         <div>
           <button onClick={goBack}>Takaisin</button>
-          <button onClick={resetGuesses}>Tyhjennä arvaukset</button>
           <div>Arvoitus: {quote.id}</div>
+          <button onClick={resetGuesses}>Tyhjennä arvaukset</button>
           <button onClick={revealLetter}>Paljasta kirjain</button>
-          <div>
-            <div onClick={() => setShowSource(true)}>
-              {showSource ? (
-                "Lähde:"
-              ) : (
-                <span style={{ border: "1px solid black" }}>Näytä lähde</span>
-              )}
-            </div>
-            <div className={`${showSource ? "" : "hidden"}`}>{quote.source}</div>
+          <div className="source-container">
+            <h4 className="hidden">{quote.source}</h4>
+
+            {showSource ? (
+              <h4 className="source">{quote.source}</h4>
+            ) : (
+              <button className="source-btn" onClick={() => setShowSource(true)}>
+                Näytä lähde
+              </button>
+            )}
           </div>
         </div>
       </div>
-      <div className="cypher-container">{generateCypher()}</div>
-      <div className="footer">
-        {alphabet.map((a) => {
-          let classes = "";
-          if (guessed.some((g) => g === a)) {
-            classes += "fade";
-          } else if (revealed.some((g) => g === a)) {
-            classes += "fade revealed";
-          }
-          return (
-            <div key={a} className={classes}>
-              {a}
-            </div>
-          );
-        })}
+      <div className="main-container">
+        {won && <div><h1>VOITIT PELIN!</h1><div className="revealed-letters">Paljastetut kirjaimet: {number}</div></div>}
+        <div className="cypher-container">{generateCypher()}</div>
+        <div className="footer">
+          {alphabet.map((a) => {
+            let classes = "";
+            if (guessed.some((g) => g === a)) {
+              classes += "fade";
+            } else if (revealed.some((g) => g === a)) {
+              classes += "fade revealed";
+            }
+            return (
+              <div key={a} className={classes}>
+                {a}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </>
   );
