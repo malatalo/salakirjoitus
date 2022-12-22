@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/salakirjoitus/static/css/main.c3f53323.css",
+    "main.js": "/salakirjoitus/static/js/main.5b73a10c.js",
+    "index.html": "/salakirjoitus/index.html",
+    "main.c3f53323.css.map": "/salakirjoitus/static/css/main.c3f53323.css.map",
+    "main.5b73a10c.js.map": "/salakirjoitus/static/js/main.5b73a10c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c3f53323.css",
+    "static/js/main.5b73a10c.js"
+  ]
+}
